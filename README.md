@@ -9,6 +9,7 @@ Ideal to make quickly external fabric connector web page for Fortinet Fortigate
   <img src="img/bar_chart01.png" alt="BarChart" />
 </p>
 <br>
+
 ## Features
 - Analyze and filter logs in output file by simple word, string, regex
 - In found logs, you can exclude logs in the output file result by string or regex
