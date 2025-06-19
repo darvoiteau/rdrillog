@@ -111,7 +111,7 @@ pub fn bchart_format(logs: Vec<String>) -> Vec<(String, u64)>{
     vec_bchart
 }
 #[allow(deprecated)]
-pub fn schart_format(logs: Vec<String>) -> Vec<u64> {
+pub fn schart_format(logs: Vec<String>, sampling: i64) -> Vec<u64> {
     let cmn_date_log = Regex::new(r#"\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2} [+\-]\d{4}"#).unwrap();
     let iso8601_date = Regex::new(r#"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+\-]\d{2}:\d{2})"#).unwrap();
     let syslog_date = Regex::new(r#"[A-Z][a-z]{2} \d{1,2} \d{2}:\d{2}:\d{2}"#).unwrap();
@@ -153,17 +153,15 @@ pub fn schart_format(logs: Vec<String>) -> Vec<u64> {
         }
     }
 
-    // Regroupement par périodes régulières (ex: 60 secondes)
-    let period_secs = 60;
     let mut counts = BTreeMap::new();
 
     for dt in dates_utc {
         let ts = dt.timestamp();
-        let bucket = ts - (ts % period_secs);
+        let bucket = ts - (ts % sampling);
         *counts.entry(bucket).or_insert(0) += 1;
     }
 
-    // Extraction finale
+    
     counts.values().copied().collect()
 }
 

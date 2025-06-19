@@ -38,11 +38,13 @@ pub fn save_file(filename: &str, mut text: Vec<String>, erase_file: bool, duplic
         //Use HashSet to find duplication more quickly if the user don't want duplication
         let mut existing_lines: HashSet<String> = HashSet::new();
         for elem in file_content.lines(){
-            if duplicate == false {
-
+            let elem2 = elem?;
+            if duplicate == false && existing_lines.insert(elem2.clone()) ==true {
+                text_already.push(elem2);
+                text_already.push(String::from("\n"));
             }
             else if duplicate == true {
-                text_already.push(elem?);
+                text_already.push(elem2);
             }
         }
         if duplicate == false {

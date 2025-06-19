@@ -63,7 +63,11 @@ struct Args {
 
     #[argh(option, short = 'g', default = "false")]
     ///if enabled, rdrillog will show some graphs about found logs. To enable it, use "true"
-    graph: bool
+    graph: bool,
+
+    #[argh(option, default= "60")]
+    ///period in sec used for sampling in graphs. The smaller is, the most it will take a time but it will be more precise. By default 60s
+    sampling: i64
 
 
 
@@ -110,7 +114,7 @@ fn main() {
     else if options.webserver == false && options.graph == true{
         println!("Logs are ready ! Building graphs... \n");
         let vec_bchart = sanitizer::bchart_format(match_log_vec.clone());
-        let values_vec = sanitizer::schart_format(match_log_vec.clone());
+        let values_vec = sanitizer::schart_format(match_log_vec.clone(), options.sampling);
         let percent = sanitizer::gchart_format(match_log_vec, &options.logfile);
         graph::graph_display(vec_bchart, values_vec, percent).unwrap_or_else(|e|{
             eprintln!("Failed to display and build charts: {}",e);
